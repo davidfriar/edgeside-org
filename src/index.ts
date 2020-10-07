@@ -36,7 +36,7 @@ async function handleRequest(request: Request): Promise<Response> {
 
 abstract class QueryElementHandler {
   context: Context
-  requestParams: URLSearchParams
+  url: URL
   endpoint: string = ''
   key: string = ''
   cacheTTL: number = 60
@@ -44,7 +44,7 @@ abstract class QueryElementHandler {
 
   constructor(context: Context, url: URL) {
     this.context = context
-    this.requestParams = url.searchParams
+    this.url = url
   }
 
   element(element: Element) {
@@ -68,10 +68,21 @@ abstract class QueryElementHandler {
           .split(/\s*,\s*/)
           .map((x) => x.split(/\s*\:\s*/, 2))
           .map((x) => (x.length == 1 ? x.concat(x) : x))
-          .map(([k, v]) => [k, this.requestParams.get(v)]),
+          .map(([k, v]) => [k, this.getParam(v)]),
       )
     } else {
       return {}
+    }
+  }
+
+  getParam(paramName: string) {
+    const match = paramName.match(/\$(\d*)$/) // "$" followed by digits
+    if (match && match.length) {
+      const n = parseInt(match[1])
+      const segments = this.url.pathname.split('/')
+      return segments[segments.length - n - 1]
+    } else {
+      return this.url.searchParams.get(paramName)
     }
   }
 

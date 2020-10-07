@@ -146,9 +146,18 @@ class RESTElementHandler extends QueryElementHandler {
 
   getDataURL(): string {
     const url = new URL(this.endpoint)
-    Object.entries(this.endpoint).forEach(([name, value]) =>
-      url.searchParams.append(name, value),
-    )
+    Object.entries(this.variables).forEach(([name, value]) => {
+      if (name.startsWith('$')) {
+        url.pathname = url.pathname
+          .split('/')
+          .map((s) => (s === name ? value : s))
+          .join('/')
+      } else {
+        url.searchParams.append(name, value)
+      }
+    })
+    // console.log(this.variables)
+    // console.log(url.toString())
     return url.toString()
   }
 }
@@ -172,8 +181,9 @@ class TemplateElementHandler {
     text.remove()
     if (text.lastInTextNode) {
       const result = await this.context[this.key]
+      // console.log(await result.clone().text())
       const json = await result.json()
-      text.after(Mustache.render(this.template, json.data), { html: true })
+      text.after(Mustache.render(this.template, json), { html: true })
     }
   }
 }

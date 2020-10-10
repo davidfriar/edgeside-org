@@ -15,6 +15,7 @@
   "license": "MIT OR Apache-2.0",
   "dependencies": {
     "@types/mustache": "^4.0.1",
+    "jsonata": "^1.8.3",
     "mustache": "^4.0.1"
   },
   "devDependencies": {

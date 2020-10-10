@@ -3,6 +3,7 @@ import {
   GraphQLElementHandler,
   RESTElementHandler,
   TemplateElementHandler,
+  TransformElementHandler,
 } from './elements'
 
 export const defaultConfig: Config = {
@@ -10,6 +11,7 @@ export const defaultConfig: Config = {
     ['graphql', GraphQLElementHandler],
     ['rest', RESTElementHandler],
     ['template', TemplateElementHandler],
+    ['transform', TransformElementHandler],
   ],
   urlRewriteRules: [],
   converters: {},

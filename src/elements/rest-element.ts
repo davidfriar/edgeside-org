@@ -2,8 +2,8 @@ import { Context } from '../types'
 import { QueryElementHandler } from './query-element'
 
 export class RESTElementHandler extends QueryElementHandler {
-  constructor(context: Context, url: URL) {
-    super(context, url)
+  constructor(context: Context) {
+    super(context)
   }
 
   element(element: Element) {

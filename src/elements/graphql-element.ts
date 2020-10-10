@@ -3,8 +3,8 @@ import { QueryElementHandler } from './query-element'
 
 export class GraphQLElementHandler extends QueryElementHandler {
   query: string = ''
-  constructor(context: Context, url: URL) {
-    super(context, url)
+  constructor(context: Context) {
+    super(context)
   }
 
   element(element: Element) {

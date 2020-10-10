@@ -2,15 +2,15 @@ import { Context } from '../types'
 
 export abstract class QueryElementHandler {
   context: Context
-  url: URL
   endpoint: string = ''
   key: string = ''
   cacheTTL: number = 60
   variables: Object = {}
+  url: URL
 
-  constructor(context: Context, url: URL) {
+  constructor(context: Context) {
     this.context = context
-    this.url = url
+    this.url = new URL(context.request.url)
   }
 
   element(element: Element) {
@@ -53,7 +53,7 @@ export abstract class QueryElementHandler {
   }
 
   storeData(promise: Promise<Response>) {
-    this.context[this.key] = promise
+    this.context.data[this.key] = promise
   }
 
   abstract getDataURL(): string

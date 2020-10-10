@@ -18,5 +18,6 @@ const config: Config = {
 }
 
 addEventListener('fetch', (event) => {
+  console.log('hello, just checking if we have been deployed')
   event.respondWith(handleRequest(event.request, config))
 })

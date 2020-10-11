@@ -1,7 +1,7 @@
 import { Context } from '../context'
+import { BaseElementHandler } from './base-element'
 
-export abstract class QueryElementHandler {
-  context: Context
+export abstract class QueryElementHandler extends BaseElementHandler {
   endpoint: string = ''
   key: string = ''
   cacheTTL: number = 60
@@ -9,21 +9,24 @@ export abstract class QueryElementHandler {
   url: URL
 
   constructor(context: Context) {
-    this.context = context
+    super(context)
     this.url = new URL(context.request.url)
   }
 
   element(element: Element) {
-    this.endpoint = element.getAttribute('data-edgeside-endpoint') || ''
-    this.key = element.getAttribute('data-edgeside-key') || ''
+    super.element(element)
+    this.endpoint = this.getAttribute('data-edgeside-endpoint', element)
+    this.key = this.getAttribute('data-edgeside-key', element)
     if (element.hasAttribute('data-edgeside-cache-ttl')) {
       this.cacheTTL = parseInt(
-        element.getAttribute('data-edgeside-cache-ttl') as string,
+        this.getAttribute('data-edgeside-cache-ttl', element),
       )
     }
-    this.variables = this.parseParameterMap(
-      element.getAttribute('data-edgeside-parameter-map') || '',
-    )
+    if (element.hasAttribute('data-edgeside-parameter-map')) {
+      this.variables = this.parseParameterMap(
+        this.getAttribute('data-edgeside-parameter-map', element),
+      )
+    }
   }
 
   parseParameterMap(parameterMap: string) {

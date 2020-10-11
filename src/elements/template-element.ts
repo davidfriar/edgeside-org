@@ -1,16 +1,16 @@
 import { Context } from '../context'
 import Mustache from 'mustache'
+import { BaseElementHandler } from './base-element'
 
-export class TemplateElementHandler {
-  context: Context
-  key: string = ''
+export class TemplateElementHandler extends BaseElementHandler {
   template: string = ''
 
   constructor(context: Context) {
-    this.context = context
+    super(context)
   }
+
   element(element: Element) {
-    this.key = element.getAttribute('data-edgeside-key') || ''
+    super.element(element)
     this.template = ''
     element.removeAndKeepContent()
   }

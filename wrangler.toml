@@ -5,5 +5,5 @@ zone_id = "4396e027f93fa1fde8796d09e5b10979"
 route = "edgeside.org/*"
 workers_dev = false
 webpack_config = "webpack.config.js"
-vars = { ORIGIN_HOST = "david.friar.surge.sh" , ORIGIN_PROTOCOL = "http:", ORIGIN_CACHE_TTL = 60, ORIGIN_CACHE_EVERYTHING = true, DEBUG = true}
+vars = { ORIGIN_HOST = "publish-p9457-e47437.adobeaemcloud.com" , ORIGIN_PROTOCOL = "https:", ORIGIN_CACHE_TTL = 60, ORIGIN_CACHE_EVERYTHING = true, DEBUG=false}
 

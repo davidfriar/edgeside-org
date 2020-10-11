@@ -5,6 +5,7 @@ import {
   TemplateElementHandler,
   ConditionalElementHandler,
   RequestDataElementHandler,
+  TransformElementHandler,
 } from './elements'
 
 export const defaultConfig: Config = {
@@ -14,6 +15,7 @@ export const defaultConfig: Config = {
     ['template', TemplateElementHandler],
     ['conditional', ConditionalElementHandler],
     ['request-data', RequestDataElementHandler],
+    ['transform', TransformElementHandler],
   ],
   urlRewriteRules: [],
   converters: {},

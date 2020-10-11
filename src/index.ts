@@ -1,6 +1,6 @@
 import { handleRequest } from './request-handler'
 import { Config } from './types'
-import { DebugElementHandler } from './elements/debug-element'
+import { DebugElementHandler } from './elements'
 
 const config: Config = {
   elements: [

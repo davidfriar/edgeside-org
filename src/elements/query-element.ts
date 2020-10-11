@@ -53,7 +53,6 @@ export abstract class QueryElementHandler {
   }
 
   storeData(promise: Promise<Response>) {
-    console.log(this.context)
     this.context.put(this.key, promise)
   }
 

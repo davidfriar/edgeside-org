@@ -28,7 +28,7 @@ export class Context {
 
   async getText(key: string) {
     const response = await this.getResponse(key)
-    const text = response.text()
+    const text = await response.text()
     if (DEBUG) {
       console.log('Getting text from context for key %s', key)
       console.log(text)

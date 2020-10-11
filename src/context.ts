@@ -1,4 +1,4 @@
-declare const DEBUG: boolean
+declare const DEBUG: string
 
 export class Context {
   readonly request: Request
@@ -18,8 +18,7 @@ export class Context {
     const json = await response.json()
     //todo : when we have better performance testing, consider caching
     //parsed json instead of reparsing if data is used multiple times
-
-    if (DEBUG) {
+    if (DEBUG == 'true') {
       console.log('Getting JSON from context for key %s', key)
       console.log(JSON.stringify(json))
     }
@@ -29,7 +28,7 @@ export class Context {
   async getText(key: string) {
     const response = await this.getResponse(key)
     const text = await response.text()
-    if (DEBUG) {
+    if (DEBUG == 'true') {
       console.log('Getting text from context for key %s', key)
       console.log(text)
     }

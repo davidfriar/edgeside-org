@@ -1,9 +1,11 @@
 import { handleRequest } from './request-handler'
 import { Config } from './types'
+import { DebugElementHandler } from './elements/debug-element'
 
 const config: Config = {
   elements: [
-    // custom element handlers here
+    // custom element handlers here e.g.
+    ['debug', DebugElementHandler],
   ],
   urlRewriteRules: [
     // custom rewrite rules here

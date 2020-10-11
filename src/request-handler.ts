@@ -1,4 +1,5 @@
-import { Context, Config } from './types'
+import { Config } from './types'
+import { Context } from './context'
 import { mergeConfig, defaultConfig } from './default-config'
 import { URLRewriter } from './url-rewriter'
 
@@ -15,7 +16,7 @@ export async function handleRequest(
   const url = getOriginURL(request, configuration)
   const response = await fetchOrigin(url)
   if (isHTML(request)) {
-    const context: Context = { request: request, data: {} }
+    const context = new Context(request)
     const htmlRewriter = configureHTMLRewriter(configuration, context)
     return htmlRewriter.transform(response)
   } else {

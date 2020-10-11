@@ -1,4 +1,4 @@
-import { Context } from '../types'
+import { Context } from '../context'
 
 export abstract class QueryElementHandler {
   context: Context
@@ -53,7 +53,8 @@ export abstract class QueryElementHandler {
   }
 
   storeData(promise: Promise<Response>) {
-    this.context.data[this.key] = promise
+    console.log(this.context)
+    this.context.put(this.key, promise)
   }
 
   abstract getDataURL(): string

@@ -1,7 +1,4 @@
-export type Context = {
-  request: Request
-  data: { [key: string]: Promise<Response> }
-}
+import { Context } from './context'
 
 export type Converter = (input: Promise<Response>) => Promise<Response>
 

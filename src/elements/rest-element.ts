@@ -1,4 +1,4 @@
-import { Context } from '../types'
+import { Context } from '../context'
 import { QueryElementHandler } from './query-element'
 
 export class RESTElementHandler extends QueryElementHandler {

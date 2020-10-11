@@ -1,4 +1,4 @@
-import { Context } from '../types'
+import { Context } from '../context'
 import Mustache from 'mustache'
 
 export class TemplateElementHandler {
@@ -19,9 +19,7 @@ export class TemplateElementHandler {
     this.template += text.text
     text.remove()
     if (text.lastInTextNode) {
-      const result = await this.context.data[this.key]
-      // console.log(await result.clone().text())
-      const json = await result.json()
+      const json = await this.context.getJSON(this.key)
       text.after(Mustache.render(this.template, json), { html: true })
     }
   }

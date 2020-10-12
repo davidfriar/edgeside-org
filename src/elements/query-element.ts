@@ -3,7 +3,6 @@ import { BaseElementHandler } from './base-element'
 
 export abstract class QueryElementHandler extends BaseElementHandler {
   endpoint: string = ''
-  key: string = ''
   cacheTTL: number = 60
   variables: Object = {}
   url: URL
@@ -16,7 +15,6 @@ export abstract class QueryElementHandler extends BaseElementHandler {
   element(element: Element) {
     super.element(element)
     this.endpoint = this.getAttribute('data-edgeside-endpoint', element)
-    this.key = this.getAttribute('data-edgeside-key', element)
     if (element.hasAttribute('data-edgeside-cache-ttl')) {
       this.cacheTTL = parseInt(
         this.getAttribute('data-edgeside-cache-ttl', element),

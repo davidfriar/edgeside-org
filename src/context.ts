@@ -2,11 +2,13 @@ declare const DEBUG: string
 
 export class Context {
   readonly request: Request
+  readonly originURL: URL
   private data: { [key: string]: Promise<Response> }
 
-  constructor(request: Request) {
+  constructor(request: Request, originURL: URL) {
     this.data = {}
     this.request = request
+    this.originURL = originURL
   }
 
   put(key: string, promise: Promise<Response>) {
@@ -33,6 +35,10 @@ export class Context {
       console.log(text)
     }
     return text
+  }
+
+  hasData(key: string): boolean {
+    return key in this.data
   }
 
   private async getResponse(key: string): Promise<Response> {

@@ -16,7 +16,7 @@ export async function handleRequest(
   const url = getOriginURL(request, configuration)
   const response = await fetchOrigin(url)
   if (isHTML(request)) {
-    const context = new Context(request)
+    const context = new Context(request, url)
     const htmlRewriter = configureHTMLRewriter(configuration, context)
     return htmlRewriter.transform(response)
   } else {
@@ -49,6 +49,7 @@ function fetchOrigin(url: URL): Promise<Response> {
 function configureHTMLRewriter(config: Config, context: Context): HTMLRewriter {
   let htmlRewriter = new HTMLRewriter()
   config.elements.forEach(([name, elementHandler]) => {
+    console.log(elementHandler)
     htmlRewriter = htmlRewriter.on(
       `script[type='edgeside/${name}']`,
       new elementHandler(context),

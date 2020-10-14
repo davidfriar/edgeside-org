@@ -1,11 +1,13 @@
 import { handleRequest } from './request-handler'
 import { Config } from './types'
 import { DebugElementHandler } from './elements'
+import { KurtosysElementHandler } from './elements'
 
 const config: Config = {
   elements: [
     // custom element handlers here e.g.
     ['debug', DebugElementHandler],
+    ['kurtosys', KurtosysElementHandler],
   ],
   urlRewriteRules: [
     // custom rewrite rules here

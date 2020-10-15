@@ -7,7 +7,7 @@ const config: Config = {
   elements: [
     // custom element handlers here e.g.
     ['debug', DebugElementHandler],
-    ['kurtosys', KurtosysElementHandler],
+    ['securerest', KurtosysElementHandler],
   ],
   urlRewriteRules: [
     // custom rewrite rules here

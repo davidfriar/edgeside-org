@@ -12,7 +12,7 @@ export class RequestDataElementHandler extends BaseElementHandler {
     console.log(request)
     const data = JSON.stringify({
       url: request.url,
-      headers: request.headers,
+      headers: this.getHeaders(request),
       cf: request.cf,
       method: request.method,
     })
@@ -20,5 +20,13 @@ export class RequestDataElementHandler extends BaseElementHandler {
     // to stringify and pack this back into the promise of a response
     this.context.put(this.key, Promise.resolve(new Response(data, {})))
     element.remove()
+  }
+
+  private getHeaders(request: Request): { [key: string]: string } {
+    const result: { [key: string]: string } = {}
+    for (const header of request.headers.entries()) {
+      result[header[0]] = header[1]
+    }
+    return result
   }
 }

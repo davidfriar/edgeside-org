@@ -17,6 +17,8 @@ const config: Config = {
     ],
     ['demo1/.*/country.html', 'demo1/country.html'],
     ['demo1/.*/continent.html', 'demo1/continent.html'],
+    ['demo1/.*/continent.html', 'demo1/continent.html'],
+    ['demo1/.*/time.html', 'demo1/time.html'],
     [
       '/etc/cloudsettings.kernel.js/libs/settings/cloudsettings/legacy/contexthub',
       'hacktostopthisloading',

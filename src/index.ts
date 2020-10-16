@@ -15,6 +15,10 @@ const config: Config = {
       'welcome-to-the-edge/.*/country-matters.html',
       'welcome-to-the-edge/country-matters.html',
     ],
+    [
+      '/etc/cloudsettings.kernel.js/libs/settings/cloudsettings/legacy/contexthub',
+      'hacktostopthisloading',
+    ],
   ],
   converters: {
     //custom converters here

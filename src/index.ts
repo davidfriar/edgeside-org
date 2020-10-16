@@ -15,6 +15,7 @@ const config: Config = {
       'welcome-to-the-edge/.*/country-matters.html',
       'welcome-to-the-edge/country-matters.html',
     ],
+    ['demo1/.*/country.html', 'demo1/country.html'],
     [
       '/etc/cloudsettings.kernel.js/libs/settings/cloudsettings/legacy/contexthub',
       'hacktostopthisloading',

@@ -12,10 +12,10 @@ export class GraphQLElementHandler extends QueryElementHandler {
     super.element(element)
   }
 
-  text(text: Text) {
+  async text(text: Text) {
     this.query += text.text
     if (text.lastInTextNode) {
-      this.executeQuery()
+      await this.executeQuery()
     }
   }
 

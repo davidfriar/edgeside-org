@@ -6,9 +6,9 @@ export class RESTElementHandler extends QueryElementHandler {
     super(context)
   }
 
-  element(element: Element) {
+  async element(element: Element) {
     super.element(element)
-    this.executeQuery()
+    await this.executeQuery()
   }
 
   getDataURL(): string {
@@ -23,8 +23,6 @@ export class RESTElementHandler extends QueryElementHandler {
         url.searchParams.append(name, value)
       }
     })
-    // console.log(this.variables)
-    // console.log(url.toString())
     return url.toString()
   }
 }

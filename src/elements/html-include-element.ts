@@ -1,6 +1,5 @@
 import { Context } from '../context'
 import { BaseElementHandler } from './base-element'
-import { parse, eval } from 'expression-eval'
 
 export class HTMLIncludeElementHandler extends BaseElementHandler {
   endpoint: string = ''
@@ -41,25 +40,8 @@ export class HTMLIncludeElementHandler extends BaseElementHandler {
   }
 
   private async getIncludeURL(): Promise<string> {
-    const url = await this.replaceExpressions(this.endpoint)
+    const url = await this.replaceExpressionsWithKeyData(this.endpoint)
     const absoluteURL = new URL(url, this.context.originURL)
     return absoluteURL.toString()
-  }
-
-  private async replaceExpressions(s: string): Promise<string> {
-    if (this.context.hasData(this.key)) {
-      const data = await this.context.getJSON(this.key)
-      // match expressions like ${foo}
-      const re = /\$\{[^}]*\}/g
-      return s.replace(re, (x) => {
-        //use a function to evaluate any matches
-        const expression = x.substring(2, x.length - 1) // remove the '${' and '}'
-        const ast = parse(expression)
-        const result = eval(ast, data)
-        return result
-      })
-    } else {
-      return s
-    }
   }
 }

@@ -1,10 +1,13 @@
 import { Context } from '../context'
 import { BaseElementHandler } from './base-element'
 
+declare const DEBUG: string
+
 export abstract class QueryElementHandler extends BaseElementHandler {
   endpoint: string = ''
   cacheTTL: number = 60
-  variables: Object = {}
+  variables: { [key: string]: any } = {}
+  inputKey?: string
   url: URL
 
   constructor(context: Context) {
@@ -19,6 +22,9 @@ export abstract class QueryElementHandler extends BaseElementHandler {
       this.cacheTTL = parseInt(
         this.getAttribute('data-edgeside-cache-ttl', element),
       )
+    }
+    if (element.hasAttribute('data-edgeside-input-key')) {
+      this.inputKey = this.getAttribute('data-edgeside-input-key', element)
     }
     if (element.hasAttribute('data-edgeside-parameter-map')) {
       this.variables = this.parseParameterMap(
@@ -43,13 +49,17 @@ export abstract class QueryElementHandler extends BaseElementHandler {
   }
 
   getParam(paramName: string) {
-    const match = paramName.match(/\$(\d*)$/) // "$" followed by digits
+    const match = paramName.match(/\/(\d*)$/) // match "/" followed by digits and nothing else
     if (match && match.length) {
       const n = parseInt(match[1])
       const segments = this.url.pathname.split('/')
       return segments[segments.length - n - 1]
     } else {
-      return this.url.searchParams.get(paramName)
+      if (this.inputKey && paramName.indexOf('$') > -1) {
+        return paramName
+      } else {
+        return this.url.searchParams.get(paramName)
+      }
     }
   }
 
@@ -61,6 +71,9 @@ export abstract class QueryElementHandler extends BaseElementHandler {
 
   fetchData(): Promise<Response> {
     const url = this.getDataURL()
+    if (DEBUG == 'true') {
+      console.log('fetching data from:' + url.toString())
+    }
     return fetch(url, {
       method: 'GET',
       headers: {
@@ -71,7 +84,19 @@ export abstract class QueryElementHandler extends BaseElementHandler {
     })
   }
 
-  executeQuery() {
+  async executeQuery() {
+    if (DEBUG == 'true') {
+      console.log('Variables before replacement = ', this.variables)
+    }
+    if (this.inputKey) {
+      const data = await this.context.getJSON(this.inputKey)
+      for (const key in this.variables) {
+        this.variables[key] = this.replaceExpressions(this.variables[key], data)
+      }
+    }
+    if (DEBUG == 'true') {
+      console.log('Variables after replacement = ', this.variables)
+    }
     this.storeData(this.fetchData())
   }
 }

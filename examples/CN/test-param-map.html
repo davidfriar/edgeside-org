@@ -1,0 +1,65 @@
+hello
+<hr>
+<script type="edgeside/request-data" data-edgeside-key="requestData"></script>
+<script type="edgeside/debug" data-edgeside-key="requestData"></script>
+<hr>
+<script type="edgeside/graphql"
+  data-edgeside-key="countryDataFromRequestParamSameName"
+  data-edgeside-endpoint="http://countries.trevorblades.com/"
+  data-edgeside-parameter-map="code">
+  query Country ($code:ID!){
+    country(code:$code){
+      name
+    }
+  }
+</script>
+<script type="edgeside/debug" data-edgeside-key="countryDataFromRequestParamSameName"></script>
+<hr>
+<script type="edgeside/graphql"
+  data-edgeside-key="countryDataFromRequestParamDifferentName"
+  data-edgeside-endpoint="http://countries.trevorblades.com/"
+  data-edgeside-parameter-map="code:foo">
+  query Country ($code:ID!){
+    country(code:$code){
+      name
+    }
+  }
+</script>
+<script type="edgeside/debug" data-edgeside-key="countryDataFromRequestParamDifferentName"></script>
+<hr>
+  <!-- numbered from the right, so /0 is the filename, /1 is the path segment before the filename, etc -->
+<script type="edgeside/graphql"
+  data-edgeside-key="countryDataFromNumberedURLSegment"
+  data-edgeside-endpoint="http://countries.trevorblades.com/"
+  data-edgeside-parameter-map="code:/1">
+  query Country ($code:ID!){
+    country(code:$code){
+      name
+    }
+  }
+</script>
+<script type="edgeside/debug" data-edgeside-key="countryDataFromNumberedURLSegment"></script>
+<hr>
+<script type="edgeside/graphql"
+  data-edgeside-key="countryDataFromContextExpression"
+  data-edgeside-input-key="requestData"
+  data-edgeside-endpoint="http://countries.trevorblades.com/"
+  data-edgeside-parameter-map="code:${headers['cf-ipcountry']}">
+  query Country ($code:ID!){
+    country(code:$code){
+      name
+    }
+  }
+</script>
+
+<script type="edgeside/debug" data-edgeside-key="countryDataFromContextExpression"></script>
+<hr>
+<script type="edgeside/html-include"
+  data-edgeside-key="requestData"
+  data-edgeside-endpoint="/includes/test-include.html"></script>
+<hr>
+<script type="edgeside/html-include"
+  data-edgeside-key="requestData"
+  data-edgeside-endpoint="/includes/${headers['cf-ipcountry']}/test-include.html"></script>
+<hr>
+goodbye

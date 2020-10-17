@@ -37,6 +37,7 @@ export abstract class QueryElementHandler extends BaseElementHandler {
     if (parameterMap) {
       return Object.fromEntries(
         parameterMap
+          .replace(/&#39;/g, "'")
           .trim()
           .split(/\s*,\s*/)
           .map((x) => x.split(/\s*\:\s*/, 2))

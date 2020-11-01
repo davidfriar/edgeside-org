@@ -1,6 +1,8 @@
 import { Context } from '../context'
 import { BaseElementHandler } from './base-element'
 
+declare const ORIGIN_PATH_PREFIX: string
+
 export class HTMLIncludeElementHandler extends BaseElementHandler {
   endpoint: string = ''
   cacheTTL: number = 60
@@ -40,7 +42,14 @@ export class HTMLIncludeElementHandler extends BaseElementHandler {
   }
 
   private async getIncludeURL(): Promise<string> {
-    const url = await this.replaceExpressionsWithKeyData(this.endpoint)
+    let url = await this.replaceExpressionsWithKeyData(this.endpoint)
+    if (url.startsWith('/')) {
+      try {
+        url = '/' + ORIGIN_PATH_PREFIX + url
+      } catch (e) {
+        //ignore
+      }
+    }
     const absoluteURL = new URL(url, this.context.originURL)
     return absoluteURL.toString()
   }

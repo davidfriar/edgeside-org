@@ -4,6 +4,7 @@ import { mergeConfig, defaultConfig } from './default-config'
 import { URLRewriter } from './url-rewriter'
 
 declare const ORIGIN_HOST: string
+declare const ORIGIN_PATH_PREFIX: string
 declare const ORIGIN_PROTOCOL: string
 declare const ORIGIN_CACHE_TTL: number
 declare const ORIGIN_CACHE_EVERYTHING: boolean
@@ -34,6 +35,11 @@ function getOriginURL(request: Request, config: Config): URL {
   url.host = ORIGIN_HOST
   url.protocol = ORIGIN_PROTOCOL
   url.pathname = new URLRewriter(config.urlRewriteRules).rewrite(url.pathname)
+  try {
+    url.pathname = ORIGIN_PATH_PREFIX + url.pathname
+  } catch (e) {
+    //ignore
+  }
   return url
 }
 

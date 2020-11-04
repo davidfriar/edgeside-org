@@ -17,23 +17,18 @@ export abstract class QueryElementHandler extends BaseElementHandler {
 
   element(element: Element) {
     super.element(element)
-    this.endpoint = this.getAttribute('data-edgeside-endpoint', element)
-    if (element.hasAttribute('data-edgeside-cache-ttl')) {
-      this.cacheTTL = parseInt(
-        this.getAttribute('data-edgeside-cache-ttl', element),
-      )
+    this.endpoint = this.getAttribute('endpoint', element)
+    if (this.hasAttribute('cache-ttl', element)) {
+      this.cacheTTL = parseInt(this.getAttribute('cache-ttl', element))
     }
-    if (element.hasAttribute('data-edgeside-input-key')) {
-      this.inputKey = this.getAttribute('data-edgeside-input-key', element)
-    }
-    if (element.hasAttribute('data-edgeside-parameter-map')) {
-      this.variables = this.parseParameterMap(
-        this.getAttribute('data-edgeside-parameter-map', element),
-      )
-    }
+    this.inputKey = this.getOptionalAttribute('input-key', element)
+    this.variables = this.parseParameterMap(
+      this.getOptionalAttribute('parameter-map', element),
+    )
+    element.remove()
   }
 
-  parseParameterMap(parameterMap: string) {
+  parseParameterMap(parameterMap: string | undefined) {
     if (parameterMap) {
       return Object.fromEntries(
         parameterMap

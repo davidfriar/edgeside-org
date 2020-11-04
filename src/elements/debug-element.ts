@@ -9,5 +9,6 @@ export class DebugElementHandler extends BaseElementHandler {
   async element(element: Element) {
     super.element(element)
     element.after(await this.context.getText(this.key))
+    element.remove()
   }
 }

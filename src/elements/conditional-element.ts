@@ -9,7 +9,7 @@ export class ConditionalElementHandler extends BaseElementHandler {
 
   async element(element: Element) {
     super.element(element)
-    const expression = this.getAttribute('data-edgeside-expression', element)
+    const expression = this.getAttribute('expression', element)
     const ast = parse(expression.replace(/&#39;/g, "'"))
     const data = await this.context.getJSON(this.key)
     const result = eval(ast, data)

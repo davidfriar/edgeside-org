@@ -1,18 +1,17 @@
-import { Context } from '../types'
+import { Context } from '../context'
 import jsonata from 'jsonata'
+import { BaseElementHandler } from './base-element'
 
-export class TransformElementHandler {
-  context: Context
-  key: string = ''
+export class TransformElementHandler extends BaseElementHandler {
   inputKey: string = ''
   transformation: string = ''
 
   constructor(context: Context) {
-    this.context = context
+    super(context)
   }
   element(element: Element) {
-    this.key = element.getAttribute('data-edgeside-key') || ''
-    this.inputKey = element.getAttribute('data-edgeside-input-key') || ''
+    super.element(element)
+    this.inputKey = this.getAttribute('input-key', element)
     this.transformation = ''
     element.removeAndKeepContent()
   }
@@ -21,16 +20,11 @@ export class TransformElementHandler {
     this.transformation += text.text
     text.remove()
     if (text.lastInTextNode) {
-      const input = await this.context.data[this.inputKey]
-      console.log('transform handler got data:')
-      console.log(await input.clone().text())
-      const json = await input.json()
+      const json = await this.context.getJSON(this.inputKey)
       const expression = jsonata(this.transformation)
       const result = expression.evaluate(json)
-      console.log('result of transform')
-      console.log(JSON.stringify(result))
       const output = Promise.resolve(new Response(JSON.stringify(result), {}))
-      this.context.data[this.key] = output
+      this.context.put(this.key, output)
     }
   }
 }

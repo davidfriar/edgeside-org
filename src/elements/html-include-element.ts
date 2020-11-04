@@ -13,11 +13,9 @@ export class HTMLIncludeElementHandler extends BaseElementHandler {
 
   async element(element: Element) {
     super.element(element)
-    this.endpoint = this.getAttribute('data-edgeside-endpoint', element)
-    if (element.hasAttribute('data-edgeside-cache-ttl')) {
-      this.cacheTTL = parseInt(
-        this.getAttribute('data-edgeside-cache-ttl', element),
-      )
+    this.endpoint = this.getAttribute('endpoint', element)
+    if (element.hasAttribute('cache-ttl')) {
+      this.cacheTTL = parseInt(this.getAttribute('cache-ttl', element))
     }
     element.after(await this.fetchHTML(), { html: true })
     element.remove()

@@ -50,7 +50,7 @@ export class HTMLIncludeElementHandler extends BaseElementHandler {
         //ignore
       }
     }
-    const absoluteURL = new URL(url, this.context.originURL)
+    const absoluteURL = new URL(url, this.getOriginURL())
     return absoluteURL.toString()
   }
 }

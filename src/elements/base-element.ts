@@ -50,15 +50,18 @@ export class ContextWriter extends ContextWrapper {
 }
 
 export abstract class BaseElementHandler {
-  context: Context
-  key: string = ''
+  private context: Context
 
   constructor(context: Context) {
     this.context = context
   }
 
-  element(element: Element) {
-    this.key = this.getAttribute('key', element)
+  protected getOriginURL() {
+    return this.context.originURL
+  }
+
+  protected getRequest() {
+    return this.context.request
   }
 
   protected getContextReader(element: Element): ContextReader {

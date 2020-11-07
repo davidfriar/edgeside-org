@@ -1,13 +1,20 @@
 import { Context } from '../context'
-import { BaseElementHandler } from './base-element'
+import {
+  BaseElementHandler,
+  ContextReader,
+  ContextWriter,
+  replaceExpressions,
+} from './base-element'
 
 declare const DEBUG: string
 
 export abstract class QueryElementHandler extends BaseElementHandler {
-  endpoint: string = ''
-  cacheTTL: number = 60
+  endpoint!: string
+  cacheTTL!: number
+  input?: ContextReader
+  output!: ContextWriter
+
   variables: { [key: string]: any } = {}
-  inputKey?: string
   url: URL
 
   constructor(context: Context) {
@@ -16,12 +23,10 @@ export abstract class QueryElementHandler extends BaseElementHandler {
   }
 
   element(element: Element) {
-    super.element(element)
+    this.input = this.getOptionalContextReader(element)
+    this.output = this.getContextWriter(element)
     this.endpoint = this.getAttribute('endpoint', element)
-    if (this.hasAttribute('cache-ttl', element)) {
-      this.cacheTTL = parseInt(this.getAttribute('cache-ttl', element))
-    }
-    this.inputKey = this.getOptionalAttribute('input-key', element)
+    this.cacheTTL = this.getOptionalNumberAttribute('cache-ttl', element, 60)
     this.variables = this.parseParameterMap(
       this.getOptionalAttribute('parameter-map', element),
     )
@@ -51,7 +56,7 @@ export abstract class QueryElementHandler extends BaseElementHandler {
       const segments = this.url.pathname.split('/')
       return segments[segments.length - n - 1]
     } else {
-      if (this.inputKey && paramName.indexOf('$') > -1) {
+      if (this.input && paramName.indexOf('$') > -1) {
         return paramName
       } else {
         return this.url.searchParams.get(paramName)
@@ -60,7 +65,7 @@ export abstract class QueryElementHandler extends BaseElementHandler {
   }
 
   storeData(promise: Promise<Response>) {
-    this.context.put(this.key, promise)
+    this.output.put(promise)
   }
 
   abstract getDataURL(): string
@@ -84,10 +89,10 @@ export abstract class QueryElementHandler extends BaseElementHandler {
     if (DEBUG == 'true') {
       console.log('Variables before replacement = ', this.variables)
     }
-    if (this.inputKey) {
-      const data = await this.context.getJSON(this.inputKey)
+    if (this.input) {
+      const data = await this.input.getJSON()
       for (const key in this.variables) {
-        this.variables[key] = this.replaceExpressions(this.variables[key], data)
+        this.variables[key] = replaceExpressions(this.variables[key], data)
       }
     }
     if (DEBUG == 'true') {

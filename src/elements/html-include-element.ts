@@ -1,22 +1,21 @@
 import { Context } from '../context'
-import { BaseElementHandler } from './base-element'
+import { BaseElementHandler, ContextReader } from './base-element'
 
 declare const ORIGIN_PATH_PREFIX: string
 
 export class HTMLIncludeElementHandler extends BaseElementHandler {
-  endpoint: string = ''
-  cacheTTL: number = 60
+  input?: ContextReader
+  endpoint!: string
+  cacheTTL!: number
 
   constructor(context: Context) {
     super(context)
   }
 
   async element(element: Element) {
-    super.element(element)
+    this.input = this.getOptionalContextReader(element)
     this.endpoint = this.getAttribute('endpoint', element)
-    if (element.hasAttribute('cache-ttl')) {
-      this.cacheTTL = parseInt(this.getAttribute('cache-ttl', element))
-    }
+    this.cacheTTL = this.getOptionalNumberAttribute('cache-ttl', element, 60)
     element.after(await this.fetchHTML(), { html: true })
     element.remove()
   }
@@ -40,7 +39,10 @@ export class HTMLIncludeElementHandler extends BaseElementHandler {
   }
 
   private async getIncludeURL(): Promise<string> {
-    let url = await this.replaceExpressionsWithKeyData(this.endpoint)
+    let url = this.endpoint
+    if (this.input) {
+      await this.input.replaceExpressions(this.endpoint)
+    }
     if (url.startsWith('/')) {
       try {
         url = '/' + ORIGIN_PATH_PREFIX + url

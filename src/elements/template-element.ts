@@ -1,16 +1,17 @@
 import { Context } from '../context'
 import Mustache from 'mustache'
-import { BaseElementHandler } from './base-element'
+import { BaseElementHandler, ContextReader } from './base-element'
 
 export class TemplateElementHandler extends BaseElementHandler {
-  template: string = ''
+  input!: ContextReader
+  template!: string
 
   constructor(context: Context) {
     super(context)
   }
 
   element(element: Element) {
-    super.element(element)
+    this.input = this.getContextReader(element)
     this.template = ''
     element.removeAndKeepContent()
   }
@@ -19,7 +20,7 @@ export class TemplateElementHandler extends BaseElementHandler {
     this.template += text.text
     text.remove()
     if (text.lastInTextNode) {
-      const json = await this.context.getJSON(this.key)
+      const json = await this.input.getJSON()
       text.after(Mustache.render(this.template, json), { html: true })
     }
   }

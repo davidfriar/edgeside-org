@@ -1,17 +1,19 @@
 import { Context } from '../context'
-import { BaseElementHandler } from './base-element'
+import { BaseElementHandler, ContextReader } from './base-element'
 import { parse, eval } from 'expression-eval'
 
 export class ConditionalElementHandler extends BaseElementHandler {
+  input!: ContextReader
+
   constructor(context: Context) {
     super(context)
   }
 
   async element(element: Element) {
-    super.element(element)
+    this.input = this.getContextReader(element)
     const expression = this.getAttribute('expression', element)
     const ast = parse(expression.replace(/&#39;/g, "'"))
-    const data = await this.context.getJSON(this.key)
+    const data = await this.input.getJSON()
     const result = eval(ast, data)
     if (result) {
       element.removeAndKeepContent()

@@ -1,5 +1,6 @@
 import { Context } from '../context'
 import { parse, eval } from 'expression-eval'
+import { decode } from 'he'
 
 const ATTR_PREFIX = 'data-edgeside-'
 
@@ -46,6 +47,10 @@ export class ContextWriter extends ContextWrapper {
 
   putObject(obj: any) {
     this.put(Promise.resolve(new Response(JSON.stringify(obj), {})))
+  }
+
+  get done(): boolean {
+    return this.context.hasData(this.key)
   }
 }
 
@@ -106,7 +111,7 @@ export abstract class BaseElementHandler {
         `Element '${elementType}' is missing required attribute: ${name}`,
       )
     }
-    return value
+    return decode(value, { isAttributeValue: true })
   }
 
   protected getOptionalAttribute(

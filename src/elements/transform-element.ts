@@ -16,20 +16,24 @@ export class TransformElementHandler extends BaseElementHandler {
   }
 
   element(element: Element) {
-    this.input = this.getContextReader(element)
     this.output = this.getContextWriter(element)
-    this.transformation = ''
+    if (!this.output.done) {
+      this.input = this.getContextReader(element)
+      this.transformation = ''
+    }
     element.removeAndKeepContent()
   }
 
   async text(text: Text) {
-    this.transformation += text.text
-    text.remove()
-    if (text.lastInTextNode) {
-      const json = await this.input.getJSON()
-      const expression = jsonata(this.transformation)
-      const result = expression.evaluate(json)
-      this.output.putObject(result)
+    if (!this.output.done) {
+      this.transformation += text.text
+      text.remove()
+      if (text.lastInTextNode) {
+        const json = await this.input.getJSON()
+        const expression = jsonata(this.transformation)
+        const result = expression.evaluate(json)
+        this.output.putObject(result)
+      }
     }
   }
 }

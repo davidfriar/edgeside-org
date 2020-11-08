@@ -10,13 +10,15 @@ export class RequestDataElementHandler extends BaseElementHandler {
 
   element(element: Element) {
     this.output = this.getContextWriter(element)
-    const request = this.getRequest()
-    this.output.putObject({
-      url: request.url,
-      headers: this.getHeaders(request),
-      cf: request.cf,
-      method: request.method,
-    })
+    if (!this.output.done) {
+      const request = this.getRequest()
+      this.output.putObject({
+        url: request.url,
+        headers: this.getHeaders(request),
+        cf: request.cf,
+        method: request.method,
+      })
+    }
     element.remove()
   }
 

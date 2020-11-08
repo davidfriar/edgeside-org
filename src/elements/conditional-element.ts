@@ -12,7 +12,7 @@ export class ConditionalElementHandler extends BaseElementHandler {
   async element(element: Element) {
     this.input = this.getContextReader(element)
     const expression = this.getAttribute('expression', element)
-    const ast = parse(expression.replace(/&#39;/g, "'"))
+    const ast = parse(expression)
     const data = await this.input.getJSON()
     const result = eval(ast, data)
     if (result) {

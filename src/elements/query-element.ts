@@ -23,13 +23,15 @@ export abstract class QueryElementHandler extends BaseElementHandler {
   }
 
   element(element: Element) {
-    this.input = this.getOptionalContextReader(element)
     this.output = this.getContextWriter(element)
-    this.endpoint = this.getAttribute('endpoint', element)
-    this.cacheTTL = this.getOptionalNumberAttribute('cache-ttl', element, 60)
-    this.variables = this.parseParameterMap(
-      this.getOptionalAttribute('parameter-map', element),
-    )
+    if (!this.output.done) {
+      this.input = this.getOptionalContextReader(element)
+      this.endpoint = this.getAttribute('endpoint', element)
+      this.cacheTTL = this.getOptionalNumberAttribute('cache-ttl', element, 60)
+      this.variables = this.parseParameterMap(
+        this.getOptionalAttribute('parameter-map', element),
+      )
+    }
     element.remove()
   }
 
@@ -37,7 +39,6 @@ export abstract class QueryElementHandler extends BaseElementHandler {
     if (parameterMap) {
       return Object.fromEntries(
         parameterMap
-          .replace(/&#39;/g, "'")
           .trim()
           .split(/\s*,\s*/)
           .map((x) => x.split(/\s*\:\s*/, 2))
@@ -86,6 +87,9 @@ export abstract class QueryElementHandler extends BaseElementHandler {
   }
 
   async executeQuery() {
+    if (this.output.done) {
+      return
+    }
     if (DEBUG == 'true') {
       console.log('Variables before replacement = ', this.variables)
     }

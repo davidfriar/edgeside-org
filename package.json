@@ -14,8 +14,10 @@
   "author": "author",
   "license": "MIT OR Apache-2.0",
   "dependencies": {
+    "@types/he": "^1.1.1",
     "@types/mustache": "^4.0.1",
     "expression-eval": "^3.1.2",
+    "he": "^1.2.0",
     "jsonata": "^1.8.3",
     "mustache": "^4.0.1"
   },

@@ -21,7 +21,7 @@ export class TransformElementHandler extends BaseElementHandler {
       this.input = this.getContextReader(element)
       this.transformation = ''
     }
-    element.removeAndKeepContent()
+    element.remove()
   }
 
   async text(text: Text) {

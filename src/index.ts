@@ -23,6 +23,11 @@ const config: Config = {
       '/etc/cloudsettings.kernel.js/libs/settings/cloudsettings/legacy/contexthub',
       'hacktostopthisloading',
     ],
+    [
+      'examples/elements/graphql/.*/example3',
+      'examples/elements/graphql/example3',
+    ],
+    ['examples/elements/rest/.*/example3', 'examples/elements/rest/example3'],
   ],
   converters: {
     //custom converters here
